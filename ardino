@@ -1,31 +1,26 @@
 #include <DHT.h>
-// Define the DHT sensor pin and type
 
-#define DHTPIN 13       // Pin connected to the DHT11 data pin
-#define DHTTYPE DHT11   // DHT11 sensor type
+#define DHTPIN 13
+#define DHTTYPE DHT11
 
-DHT dht(DHTPIN, DHTTYPE); // Create a DHT object
+DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
-  Serial.begin(9600);  // Initialize serial communication
-  dht.begin();         // Initialize the DHT11 sensor
+  Serial.begin(9600);
+  dht.begin();    
 }
 
 void loop() {
-  // Wait a moment between readings
   delay(2000);
 
-  // Read temperature and humidity
   float humidity = dht.readHumidity();
   float temperature = dht.readTemperature();
 
-  // Check if the readings are valid
   if (isnan(humidity) || isnan(temperature)) {
     Serial.println("Failed to read from DHT sensor!");
     return;
   }
 
-  // Print temperature and humidity values to the Serial Monitor
   Serial.print("Humidity: ");
   Serial.print(humidity);
   Serial.print("%  Temperature: ");
@@ -35,24 +30,24 @@ void loop() {
 
 
 
-char data;           // Variable to store received data
-const int ledPin = 12; // Pin connected to the LED
+char data;           
+const int ledPin = 12;
 
 void setup() {
-  Serial.begin(9600);       // Initialize serial communication
-  pinMode(ledPin, OUTPUT);  // Set LED pin as output
-  digitalWrite(ledPin, LOW); // Turn off LED initially
+  Serial.begin(9600);       
+  pinMode(ledPin, OUTPUT);  
+  digitalWrite(ledPin, LOW); 
 }
 
 void loop() {
-  if (Serial.available() > 0) { // Check if data is received
-    data = Serial.read();       // Read the incoming data
+  if (Serial.available() > 0) { 
+    data = Serial.read();       
     if (data == '1') {
-      digitalWrite(ledPin, HIGH); // Turn LED on
+      digitalWrite(ledPin, HIGH); 
     } else if (data == '0') {
-      digitalWrite(ledPin, LOW);  // Turn LED off
+      digitalWrite(ledPin, LOW); 
     }
-    Serial.print("Received: "); // Debug: Print received data
+    Serial.print("Received: "); 
     Serial.println(data);
   }
 }
@@ -60,45 +55,149 @@ void loop() {
 
 
 
-const int pirPin = 12;  // Pin connected to the PIR sensor output
+const int pirPin = 12;  
 
 void setup() {
-  Serial.begin(9600);       // Initialize serial communication
-  pinMode(pirPin, INPUT);   // Set PIR sensor pin as input
-}
+  Serial.begin(9600);     
+  pinMode(pirPin, INPUT);  
+} 
 
 void loop() {
-  int motionDetected = digitalRead(pirPin); // Read the PIR sensor state
+  int motionDetected = digitalRead(pirPin); 
 
-  if (motionDetected == HIGH) { // If motion is detected
+  if (motionDetected == HIGH) {
     Serial.println("Motion detected!");
   } else {
     Serial.println("No motion.");
   }
 
-  delay(500); // Delay for stability
+  delay(500);
 }
 
 
 
-char data;           // Variable to store received data
-const int ledPin = 12; // Pin connected to the LED
+char data;           
+const int ledPin = 12; 
 
 void setup() {
-  Serial.begin(9600);       // Initialize serial communication
-  pinMode(ledPin, OUTPUT);  // Set LED pin as output
-  digitalWrite(ledPin, LOW); // Turn off LED initially
+  Serial.begin(9600);      
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
 }
 
 void loop() {
-  if (Serial.available() > 0) { // Check if data is received
-    data = Serial.read();       // Read the incoming data
+  if (Serial.available() > 0) {
+    data = Serial.read();  
     if (data == '1') {
-      digitalWrite(ledPin, HIGH); // Turn LED on
+      digitalWrite(ledPin, HIGH); 
     } else if (data == '0') {
-      digitalWrite(ledPin, LOW);  // Turn LED off
+      digitalWrite(ledPin, LOW); 
     }
-    Serial.print("Received: "); // Debug: Print received data
+    Serial.print("Received: "); 
     Serial.println(data);
   }
 }
+
+
+#define IN1 26
+#define IN2 27
+#define ENA 25
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+
+  analogWrite(ENA, 200);
+
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+}
+
+void loop() {
+  delay(5000);
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  delay(2000);
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  delay(5000);
+}
+
+
+
+
+
+
+Objective
+To study and verify the connectivity between a Raspberry Pi and various essential system components, including sensors, actuators, communication modules, and peripherals.
+Materials Required
+	Raspberry Pi 4 Model B (or any available Pi model)
+	MicroSD card (16GB or more) with Raspberry Pi OS installed
+	Power supply (5V, 3A USB-C)
+	HDMI cable and Monitor
+	USB Keyboard and Mouse
+	Wi-Fi network or Ethernet cable
+	GPIO Breakout board (optional, for easier wiring)
+	Sensors:
+o	DHT22 (Temperature & Humidity Sensor)
+o	Ultrasonic Sensor (HC-SR04)
+	Actuators:
+o	Servo Motor (SG90)
+o	LED + Resistor (220Ω)
+	Communication Modules:
+o	Bluetooth USB dongle (if not built-in)
+o	USB Wi-Fi dongle (if needed)
+	Breadboard and jumper wires
+Theory
+The Raspberry Pi is a single-board computer capable of interfacing with a wide variety of peripherals and components via its GPIO (General Purpose Input Output) pins, USB ports, HDMI, Bluetooth, and Wi-Fi.
+Understanding and testing these connections is critical for building complex IoT, robotics, and embedded systems.
+Procedure
+Part A: Setting up the Raspberry Pi
+1.	Insert the preloaded MicroSD card into the Raspberry Pi.
+2.	Connect the monitor via HDMI, and attach the keyboard and mouse via USB ports.
+3.	Power up the Raspberry Pi.
+4.	Configure basic settings (Wi-Fi, updates) on Raspberry Pi OS.
+Part B: GPIO Connectivity Test
+1. LED Blinking (Basic Output Test)
+•	Connect an LED with a 220Ω resistor to GPIO17 and GND.
+•	Write a Python script to blink the LED:
+python
+CopyEdit
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+
+while True:
+    GPIO.output(17, GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(17, GPIO.LOW)
+    time.sleep(1)
+•	Run the script and observe the LED blinking.
+2. DHT22 Sensor (Basic Input Test)
+•	Connect DHT22 sensor's VCC to 3.3V, GND to GND, and Data pin to GPIO4 (with a 10k pull-up resistor).
+•	Install Adafruit_DHT library and read temperature/humidity.
+Part C: Communication Module Test
+1. Wi-Fi Test
+•	Ping a known IP address (ping 8.8.8.8) to check internet connectivity.
+2. Bluetooth Test
+•	Connect a Bluetooth device (e.g., phone or speaker).
+•	Use bluetoothctl for pairing and testing communication.
+Part D: Actuator Control
+1. Servo Motor
+•	Connect the servo signal wire to GPIO18, and power appropriately (external 5V if needed).
+•	Write a simple PWM control script to move the servo to various angles.
+Part E: Expansion and Peripherals
+1. USB Device Connection
+•	Attach a USB flash drive, and check mounting and file access.
+•	Attach a USB webcam and verify video capture using fswebcam or cheese.
+Observations
+•	Record connection success/failure for each component.
+•	Record sensor values, actuator responses, communication pairing success.
+Result
+The Raspberry Pi successfully established connectivity with various system components through GPIO, USB, Wi-Fi, and Bluetooth interfaces.
+
